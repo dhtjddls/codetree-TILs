@@ -17,6 +17,7 @@ def dfs(vertex):
 for _ in range(m):
     a, b = map(int, input().split())
     li[a].append(b)
+    li[b].append(a)
 
 visited[1] = True
 dfs(1)
