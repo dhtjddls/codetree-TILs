@@ -1,25 +1,41 @@
-from itertools import product
-
-# 입력 받기
 N, M = map(int, input().split())
 
-# 주사위 눈의 범위
-dice_faces = range(1, 7)
+path = [0 for _ in range(N)]
+used = [0 for _ in range(7)]
+def run1(lev):
+    if lev == N:
+        print(*path)
+        return
 
-# 경우의 수 생성
-all_outcomes = list(product(dice_faces, repeat=N))
+    for i in range(1, 7):
+        path[lev] = i
+        run1(lev+1)
+
+def run2(lev, start):
+    if lev == N:
+        print(*path)
+        return
+
+    for i in range(start, 7):
+        path[lev] = i
+        run2(lev+1, i)
+
+def run3(lev):
+    if lev == N:
+        print(*path)
+        return
+
+    for i in range(1, 7):
+        if used[i] == 1:
+            continue
+        used[i] = 1
+        path[lev] = i
+        run3(lev + 1)
+        used[i] = 0
 
 if M == 1:
-    # 모든 경우의 수 출력
-    for outcome in all_outcomes:
-        print(*outcome)
+    run1(0)
 elif M == 2:
-    # 중복된 경우 배제하고 출력
-    unique_outcomes = set(all_outcomes)
-    for outcome in unique_outcomes:
-        print(*outcome)
+    run2(0, 1)
 elif M == 3:
-    # 중복된 눈이 나오지 않는 경우만 출력
-    unique_no_duplicate_outcomes = set(outcome for outcome in all_outcomes if len(set(outcome)) == N)
-    for outcome in unique_no_duplicate_outcomes:
-        print(*outcome)
+    run3(0)
